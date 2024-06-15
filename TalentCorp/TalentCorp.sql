@@ -84,7 +84,7 @@ create table Usuarios
 
 create table UsuariosRoles
 (
-    id      int not null primary key,
+    id      int not null primary key identity,
     user_id int not null,
     role_id int not null foreign key (user_id) references Usuarios(id),
     foreign key (role_id) references Roles (id)
