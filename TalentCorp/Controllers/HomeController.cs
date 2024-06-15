@@ -1,32 +1,36 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TalentCorp.Models;
 
-namespace TalentCorp.Controllers
+namespace TalentCorp.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        private readonly ILogger<HomeController> _logger;
+        return View();
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    [Authorize(Roles = "USER")]
+    public string UserTest()
+    {
+        return "Hello World";
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    [Authorize(Roles = "ADMIN")]
+    public string AdminTest()
+    {
+        return "Hello World";
+    }
 
-        public IActionResult Privacy()
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error(int statusCode)
+    {
+        return View(new ErrorViewModel
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+            StatusCode = statusCode
+        });
     }
 }

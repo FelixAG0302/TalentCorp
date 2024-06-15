@@ -1,10 +1,10 @@
-﻿@model TalentCorp.Models.DB.User;
+﻿@model TalentCorp.Entities.Usuario;
 
 @{
     Layout = null;
 }
 
-<html>
+<html lang="es">
 <head>
     <title>Login</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
@@ -16,18 +16,18 @@
         <div class="row mt-5 justify-content-center">
             <div class="col-sm-4">
                 <div class="card">
-                    <div class="card-header text-center">
+                    <div class="card-header text-center fw-bold">
                         Iniciar sesion
                     </div>
                     <div class="card-body">
-                        <form asp-controller="Login" asp-action="Login" method="post">
-                            <input class="form-control mb-3" type="text" placeholder="Nombre usuario" required asp-for="UserName" />
-                            <input class="form-control mb-3" type="password" placeholder="Contrasena" required asp-for="Password" />
+                        <form asp-controller="Authentication" asp-action="Login" method="post">
+                            <input class="form-control mb-3" type="text" placeholder="Nombre Usuario" required asp-for="Username" />
+                            <input class="form-control mb-3" type="password" placeholder="Contraseña" required asp-for="Password" />
                             <div class="d-grid gap-2 mb-3">
-                                <button class="btn btn-primary" type="submit">Inciar sesion</button>
+                                <button class="btn btn-primary" type="submit">¡Inicia mi sesión!</button>
                             </div>
                             <div class="text-center">
-                                <a asp-controller="Login" asp-action="Registro">No tinees una cuenta? Clic Aqui</a>
+                                <a asp-controller="Authentication" asp-action="Registro">¿No tienes una cuenta? ¡Haz clic aquí!</a>
                             </div>
 
                             @if(ViewData["Mensaje"]!=null)
@@ -42,6 +42,5 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>

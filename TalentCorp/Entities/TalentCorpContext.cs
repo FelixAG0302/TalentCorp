@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using UniDataHub.Entities;
 
-namespace TalentCorp.Models.DB;
+namespace TalentCorp.Entities;
 
-public partial class TalentCorpContext : DbContext
+public class TalentCorpContext : DbContext
 {
     public TalentCorpContext()
     {
@@ -17,30 +16,29 @@ public partial class TalentCorpContext : DbContext
 
     public virtual DbSet<Candidato> Candidatos { get; set; }
 
-    public virtual DbSet<Educacion> Educacions { get; set; }
+    public virtual DbSet<Educacion> Educaciones { get; set; }
 
     public virtual DbSet<Empleado> Empleados { get; set; }
 
     public virtual DbSet<Entrevista> Entrevistas { get; set; }
 
-    public virtual DbSet<ExperienciaLaboral> ExperienciaLaborals { get; set; }
+    public virtual DbSet<ExperienciaLaboral> ExperienciasLaborales { get; set; }
 
     public virtual DbSet<Puesto> Puestos { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-       /// => optionsBuilder.UseSqlServer("Server=MSI; Database=TalentCorp; integrated security=true; Trust Server Certificate=True");
+    public virtual DbSet<Usuario> Usuarios { get; set; }
+
+    public virtual DbSet<UsuariosRole> UsuariosRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Candidato>(entity =>
         {
-            entity.HasKey(e => e.CandidatoId).HasName("PK__Candidat__755821FB783D186D");
+            entity.HasKey(e => e.Id).HasName("PK__Candidat__3213E83FEDEEC494");
 
-            entity.Property(e => e.CandidatoId).HasColumnName("candidatoID");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellido)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -68,13 +66,13 @@ public partial class TalentCorpContext : DbContext
 
         modelBuilder.Entity<Educacion>(entity =>
         {
-            entity.HasKey(e => e.EducacionId).HasName("PK__Educacio__2C0FD6DE298C196C");
+            entity.HasKey(e => e.Id).HasName("PK__Educacio__3213E83F6D21EB6D");
 
             entity.ToTable("Educacion");
 
-            entity.Property(e => e.EducacionId)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
-                .HasColumnName("educacionID");
+                .HasColumnName("id");
             entity.Property(e => e.CandidatoId).HasColumnName("candidatoID");
             entity.Property(e => e.FechaDesde)
                 .HasColumnType("datetime")
@@ -98,14 +96,14 @@ public partial class TalentCorpContext : DbContext
             entity.HasOne(d => d.Candidato).WithMany(p => p.Educacions)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Educacion__candi__3F466844");
+                .HasConstraintName("FK__Educacion__candi__182C9B23");
         });
 
         modelBuilder.Entity<Empleado>(entity =>
         {
-            entity.HasKey(e => e.EmpleadoId).HasName("PK__Empleado__CCDD501871F2BF65");
+            entity.HasKey(e => e.Id).HasName("PK__Empleado__3213E83FC60A6FAD");
 
-            entity.Property(e => e.EmpleadoId).HasColumnName("empleadoID");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellido)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -121,7 +119,8 @@ public partial class TalentCorpContext : DbContext
                 .HasColumnName("departamento");
             entity.Property(e => e.Estado)
                 .HasMaxLength(20)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("estado");
             entity.Property(e => e.FechaIngreso)
                 .HasColumnType("datetime")
                 .HasColumnName("fechaIngreso");
@@ -134,21 +133,21 @@ public partial class TalentCorpContext : DbContext
             entity.HasOne(d => d.Candidato).WithMany(p => p.Empleados)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Empleados__candi__46E78A0C");
+                .HasConstraintName("FK__Empleados__candi__1FCDBCEB");
 
             entity.HasOne(d => d.Puesto).WithMany(p => p.Empleados)
                 .HasForeignKey(d => d.PuestoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Empleados__puest__47DBAE45");
+                .HasConstraintName("FK__Empleados__puest__20C1E124");
         });
 
         modelBuilder.Entity<Entrevista>(entity =>
         {
-            entity.HasKey(e => e.EntrevistaId).HasName("PK__Entrevis__AD182AE912988B07");
+            entity.HasKey(e => e.Id).HasName("PK__Entrevis__3213E83FBAC6CD2E");
 
-            entity.Property(e => e.EntrevistaId)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
-                .HasColumnName("entrevistaID");
+                .HasColumnName("id");
             entity.Property(e => e.CandidatoId).HasColumnName("candidatoID");
             entity.Property(e => e.FechaEntrevista)
                 .HasColumnType("datetime")
@@ -158,23 +157,23 @@ public partial class TalentCorpContext : DbContext
             entity.HasOne(d => d.Candidato).WithMany(p => p.Entrevista)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Entrevist__candi__4222D4EF");
+                .HasConstraintName("FK__Entrevist__candi__1B0907CE");
 
             entity.HasOne(d => d.Puesto).WithMany(p => p.Entrevista)
                 .HasForeignKey(d => d.PuestoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Entrevist__puest__4316F928");
+                .HasConstraintName("FK__Entrevist__puest__1BFD2C07");
         });
 
         modelBuilder.Entity<ExperienciaLaboral>(entity =>
         {
-            entity.HasKey(e => e.ExperienciaId).HasName("PK__Experien__8544FFC0A3EF0000");
+            entity.HasKey(e => e.Id).HasName("PK__Experien__3213E83F897EDE4B");
 
             entity.ToTable("ExperienciaLaboral");
 
-            entity.Property(e => e.ExperienciaId)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
-                .HasColumnName("experienciaID");
+                .HasColumnName("id");
             entity.Property(e => e.CandidatoId).HasColumnName("candidatoID");
             entity.Property(e => e.Empresa)
                 .HasMaxLength(100)
@@ -197,14 +196,14 @@ public partial class TalentCorpContext : DbContext
             entity.HasOne(d => d.Candidato).WithMany(p => p.ExperienciaLaborals)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Experienc__candi__3C69FB99");
+                .HasConstraintName("FK__Experienc__candi__15502E78");
         });
 
         modelBuilder.Entity<Puesto>(entity =>
         {
-            entity.HasKey(e => e.PuestoId).HasName("PK__Puestos__2BAB308272487B6C");
+            entity.HasKey(e => e.Id).HasName("PK__Puestos__3213E83FB738E54B");
 
-            entity.Property(e => e.PuestoId).HasColumnName("puestoID");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripción)
                 .HasColumnType("text")
                 .HasColumnName("descripción");
@@ -227,13 +226,25 @@ public partial class TalentCorpContext : DbContext
                 .HasColumnName("salarioMin");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__users__CB9A1CDFED66EF23");
+            entity.HasKey(e => e.Id).HasName("PK__Roles__3213E83FC5D28001");
 
-            entity.ToTable("users");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Descripcion)
+                .HasColumnType("text")
+                .HasColumnName("descripcion");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("nombre");
+        });
 
-            entity.Property(e => e.UserId).HasColumnName("userID");
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83F4FE48A48");
+
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -242,14 +253,28 @@ public partial class TalentCorpContext : DbContext
                 .HasMaxLength(30)
                 .IsUnicode(false)
                 .HasColumnName("password");
-            entity.Property(e => e.UserName)
+            entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("userName");
+                .HasColumnName("username");
         });
 
-        OnModelCreatingPartial(modelBuilder);
-    }
+        modelBuilder.Entity<UsuariosRole>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__UsuariosRole__3213E73F4FI48A48");
 
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Role).WithMany()
+                .HasForeignKey(d => d.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UsuariosR__role___30F848ED");
+
+            entity.HasOne(d => d.User).WithMany()
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UsuariosR__role___300424B4");
+        });
+    }
 }

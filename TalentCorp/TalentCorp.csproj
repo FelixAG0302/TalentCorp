@@ -18,7 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Filtros\" />
+    <_ContentIncludedByDefault Remove="Views\Empleadoes\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Empleadoes\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Empleadoes\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Empleadoes\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Empleadoes\Index.cshtml" />
   </ItemGroup>
 
 </Project>

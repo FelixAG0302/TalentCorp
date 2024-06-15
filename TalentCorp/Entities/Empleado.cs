@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TalentCorp.Models.DB;
+namespace UniDataHub.Entities;
 
 public partial class Empleado
 {
-    public int EmpleadoId { get; set; }
+    public int Id { get; set; }
 
     public string Cedula { get; set; } = null!;
 

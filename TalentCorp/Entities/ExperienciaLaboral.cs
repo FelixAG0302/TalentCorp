@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TalentCorp.Models.DB;
+namespace UniDataHub.Entities;
 
 public partial class ExperienciaLaboral
 {
-    public int ExperienciaId { get; set; }
+    public int Id { get; set; }
 
     public int CandidatoId { get; set; }
 

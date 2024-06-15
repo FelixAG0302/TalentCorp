@@ -10,6 +10,11 @@
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        <br/>
+        @if (Model.StatusCode != 0)
+        {
+            <strong>Status Code:</strong> <code>@Model.StatusCode</code>
+        }
     </p>
 }
 
