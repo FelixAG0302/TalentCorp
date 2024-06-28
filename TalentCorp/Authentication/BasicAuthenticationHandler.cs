@@ -75,7 +75,7 @@ public class BasicAuthenticationHandler(
 
     protected override Task HandleChallengeAsync(AuthenticationProperties properties)
     {
-        Response.Redirect("Authentication/Login/");
+        Response.Redirect("../Authentication/Login/");
         return Task.CompletedTask;
     }
 }

@@ -7,7 +7,6 @@ namespace TalentCorp.Controllers.Authentication;
 
 public class AuthenticationController(TalentCorpContext context) : Controller
 {
-    
     private const string DefaultRole = "USER";
 
     [HttpGet]
@@ -62,7 +61,7 @@ public class AuthenticationController(TalentCorpContext context) : Controller
             .FirstOrDefaultAsync();
         if (usuario == null)
         {
-            ViewData["Mensaje"] = "El usuario ingresado es incorrecto";
+            ViewData["Mensaje"] = "¡Las credenciales son incorrectas!";
             return View(modelUsuario);
         }
 
