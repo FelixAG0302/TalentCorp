@@ -82,17 +82,17 @@ create table Usuarios
     password varchar(30)
 )
 
+create table Roles
+(
+    id          int not null primary key,
+    nombre      varchar(50),
+    descripcion text
+)
+
 create table UsuariosRoles
 (
     id      int not null primary key identity,
     user_id int not null,
     role_id int not null foreign key (user_id) references Usuarios(id),
     foreign key (role_id) references Roles (id)
-)
-
-create table Roles
-(
-    id          int not null primary key,
-    nombre      varchar(50),
-    descripcion text
 )
