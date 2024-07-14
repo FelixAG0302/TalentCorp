@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.Data;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using TalentCorp.Entities;
-using UniDataHub.Entities;
 
 namespace TalentCorp.Controllers
 {
-    public class CandidatoesController : Controller
+    public class CandidatoesController(TalentCorpContext context) : Controller
     {
-        private readonly TalentCorpContext _context;
-
-        public CandidatoesController(TalentCorpContext context)
-        {
-            _context = context;
-        }
-
         // GET: Candidatoes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Candidatos.ToListAsync());
+            return View(await context.Candidatos.ToListAsync());
         }
 
         // GET: Candidatoes/Details/5
@@ -33,7 +24,7 @@ namespace TalentCorp.Controllers
                 return NotFound();
             }
 
-            var candidato = await _context.Candidatos
+            var candidato = await context.Candidatos
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (candidato == null)
             {
@@ -49,20 +40,92 @@ namespace TalentCorp.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Export()
+        {
+            var candidatos = await context.Candidatos
+                .ToListAsync();
+
+            var table = ConvertToDataTable(candidatos);
+
+            using (var excelPackage = new ExcelPackage())
+            {
+                var worksheet = excelPackage.Workbook.Worksheets.Add("Sheet1");
+
+                for (var i = 0; i < table.Columns.Count; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = table.Columns[i].ColumnName;
+                }
+
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+                    for (var j = 0; j < table.Columns.Count; j++)
+                    {
+                        worksheet.Cells[i + 2, j + 1].Value = table.Rows[i][j].ToString();
+                    }
+                }
+
+                FileInfo? file = null;
+                try
+                {
+                    file = new FileInfo("candidatos.xlsx");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Ha ocurrido un error al intentar exportar la información de los Candidatos.");
+                }
+
+                if (file != null)
+                {
+                    await excelPackage.SaveAsAsync(file);
+                }
+            }
+
+            Console.WriteLine("Datos exportados a Excel exitosamente.");
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        private static DataTable ConvertToDataTable<T>(IList<T> data)
+        {
+            var properties = typeof(T).GetProperties();
+            var dataTable = new DataTable();
+
+            foreach (var prop in properties)
+            {
+                dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            }
+
+            foreach (var item in data)
+            {
+                var row = dataTable.NewRow();
+                foreach (var prop in properties)
+                {
+                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                }
+
+                dataTable.Rows.Add(row);
+            }
+
+            return dataTable;
+        }
+
         // POST: Candidatoes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento,Estado")] Candidato candidato)
+        public async Task<IActionResult> Create(
+            [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento,Estado")]
+            Candidato candidato)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(candidato);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(candidato);
             }
-            return View(candidato);
+
+            context.Add(candidato);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Candidatoes/Edit/5
@@ -73,11 +136,12 @@ namespace TalentCorp.Controllers
                 return NotFound();
             }
 
-            var candidato = await _context.Candidatos.FindAsync(id);
+            var candidato = await context.Candidatos.FindAsync(id);
             if (candidato == null)
             {
                 return NotFound();
             }
+
             return View(candidato);
         }
 
@@ -86,34 +150,38 @@ namespace TalentCorp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento,Estado")] Candidato candidato)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento,Estado")]
+            Candidato candidato)
         {
             if (id != candidato.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(candidato);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CandidatoExists(candidato.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(candidato);
             }
-            return View(candidato);
+
+            try
+            {
+                context.Update(candidato);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CandidatoExists(candidato.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Candidatoes/Delete/5
@@ -124,7 +192,7 @@ namespace TalentCorp.Controllers
                 return NotFound();
             }
 
-            var candidato = await _context.Candidatos
+            var candidato = await context.Candidatos
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (candidato == null)
             {
@@ -139,19 +207,19 @@ namespace TalentCorp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var candidato = await _context.Candidatos.FindAsync(id);
+            var candidato = await context.Candidatos.FindAsync(id);
             if (candidato != null)
             {
-                _context.Candidatos.Remove(candidato);
+                context.Candidatos.Remove(candidato);
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CandidatoExists(int id)
         {
-            return _context.Candidatos.Any(e => e.Id == id);
+            return context.Candidatos.Any(e => e.Id == id);
         }
     }
 }

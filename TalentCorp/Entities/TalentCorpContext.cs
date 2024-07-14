@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UniDataHub.Entities;
 
 namespace TalentCorp.Entities;
 

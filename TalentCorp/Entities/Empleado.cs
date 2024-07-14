@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UniDataHub.Entities;
+namespace TalentCorp.Entities;
 
-public partial class Empleado
+public class Empleado
 {
     public int Id { get; set; }
 

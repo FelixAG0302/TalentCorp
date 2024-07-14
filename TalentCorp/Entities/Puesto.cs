@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace TalentCorp.Entities;
 
-namespace UniDataHub.Entities;
-
-public partial class Puesto
+public class Puesto
 {
     public int Id { get; set; }
 

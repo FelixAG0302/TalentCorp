@@ -1,43 +1,45 @@
-﻿@model IEnumerable<UniDataHub.Entities.Candidato>
+﻿@model IEnumerable<TalentCorp.Entities.Candidato>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1 class="text-center">Informacion de candidatos</h1>
-<br />
+<br/>
 <div class="d-flex justify-content-center">
     <a asp-action="Create">
         <button class="btn btn-primary">Agregar candidato</button>
     </a>
+    <a asp-action="Export" class="btn btn-secondary">Exportar</a>
 </div>
-<br />
+<br/>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Cédula)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Apellido)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaIngreso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Departamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Cédula)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaIngreso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Departamento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Cédula)
@@ -59,16 +61,16 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">
-                        <button class="btn btn-primary">Editar</button>
+                    <button class="btn btn-primary">Editar</button>
                 </a>
                 <a asp-action="Details" asp-route-id="@item.Id">
-                        <button class="btn btn-success">Visualizar</button>
+                    <button class="btn btn-success">Visualizar</button>
                 </a>
                 <a asp-action="Delete" asp-route-id="@item.Id">
-                        <button class="btn btn-danger">Eliminar</button>
+                    <button class="btn btn-danger">Eliminar</button>
                 </a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
