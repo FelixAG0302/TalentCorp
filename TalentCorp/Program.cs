@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using TalentCorp.Authentication;
-using TalentCorp.Entities;
+using TalentCorp.Context;
 
 namespace TalentCorp;
 

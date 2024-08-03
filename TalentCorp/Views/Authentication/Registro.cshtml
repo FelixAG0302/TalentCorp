@@ -20,9 +20,9 @@
                 </div>
                 <div class="card-body">
                     <form asp-controller="Authentication" asp-action="Registro" method="post">
-                        <input class="form-control mb-3" type="text" placeholder="Nombre de usuario" required asp-for="Username"/>
-                        <input class="form-control mb-3" type="text" placeholder="Correo electrónico" required asp-for="Email"/>
-                        <input class="form-control mb-3" type="password" placeholder="Contraseña" required asp-for="Password"/>
+                        <input class="form-control mb-3" type="text" placeholder="Nombre de usuario" required asp-for="Nombre"/>
+                        <input class="form-control mb-3" type="text" placeholder="Correo electrónico" required asp-for="Correo"/>
+                        <input class="form-control mb-3" type="password" placeholder="Contraseña" required asp-for="Contrasena"/>
                         <input class="form-control mb-3" type="password" placeholder="Confirmar contraseña" required/>
                         <div class="d-grid gap-2 mb-3">
                             <button class="btn btn-primary" type="submit">¡Regístrame!</button>

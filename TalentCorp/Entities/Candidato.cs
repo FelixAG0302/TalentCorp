@@ -1,6 +1,6 @@
 ﻿namespace TalentCorp.Entities;
 
-public class Candidato
+public sealed class Candidato
 {
     public int Id { get; set; }
 
@@ -14,13 +14,11 @@ public class Candidato
 
     public string Departamento { get; set; } = null!;
 
-    public string Estado { get; set; } = null!;
+    public ICollection<Educacion> Educacions { get; set; } = new List<Educacion>();
 
-    public virtual ICollection<Educacion> Educacions { get; set; } = new List<Educacion>();
+    public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
 
-    public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
+    public ICollection<Entrevista> Entrevista { get; set; } = new List<Entrevista>();
 
-    public virtual ICollection<Entrevista> Entrevista { get; set; } = new List<Entrevista>();
-
-    public virtual ICollection<ExperienciaLaboral> ExperienciaLaborals { get; set; } = new List<ExperienciaLaboral>();
+    public ICollection<ExperienciaLaboral> ExperienciaLaborals { get; set; } = new List<ExperienciaLaboral>();
 }

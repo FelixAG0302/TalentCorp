@@ -1,6 +1,6 @@
 ﻿namespace TalentCorp.Entities;
 
-public class ExperienciaLaboral
+public sealed class ExperienciaLaboral
 {
     public int Id { get; set; }
 
@@ -16,5 +16,5 @@ public class ExperienciaLaboral
 
     public decimal Salario { get; set; }
 
-    public virtual Candidato Candidato { get; set; } = null!;
+    public Candidato Candidato { get; set; } = null!;
 }

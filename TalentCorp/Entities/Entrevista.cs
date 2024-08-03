@@ -1,6 +1,6 @@
 ﻿namespace TalentCorp.Entities;
 
-public class Entrevista
+public sealed class Entrevista
 {
     public int Id { get; set; }
 
@@ -10,7 +10,7 @@ public class Entrevista
 
     public DateTime FechaEntrevista { get; set; }
 
-    public virtual Candidato Candidato { get; set; } = null!;
+    public Candidato Candidato { get; set; } = null!;
 
-    public virtual Puesto Puesto { get; set; } = null!;
+    public Puesto Puesto { get; set; } = null!;
 }

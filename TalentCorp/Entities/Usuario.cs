@@ -1,12 +1,14 @@
 ﻿namespace TalentCorp.Entities;
 
-public class Usuario
+public sealed class Usuario
 {
     public int Id { get; set; }
 
-    public string? Username { get; set; }
+    public string Nombre { get; set; } = null!;
 
-    public string? Email { get; set; }
+    public string Correo { get; set; } = null!;
 
-    public string? Password { get; set; }
+    public string Contrasena { get; set; } = null!;
+
+    public ICollection<UsuariosRole> UsuariosRoles { get; set; } = new List<UsuariosRole>();
 }

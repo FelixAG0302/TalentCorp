@@ -1,14 +1,14 @@
 ﻿namespace TalentCorp.Entities;
 
-public class UsuariosRole
+public sealed class UsuariosRole
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int UsuarioId { get; set; }
 
-    public int RoleId { get; set; }
+    public int RolId { get; set; }
 
-    public virtual Role Role { get; set; } = null!;
+    public Role Rol { get; set; } = null!;
 
-    public virtual Usuario User { get; set; } = null!;
+    public Usuario Usuario { get; set; } = null!;
 }

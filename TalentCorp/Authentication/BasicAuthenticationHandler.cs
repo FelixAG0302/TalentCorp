@@ -4,7 +4,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using TalentCorp.Entities;
+using TalentCorp.Context;
 
 namespace TalentCorp.Authentication;
 
@@ -46,7 +46,7 @@ public class BasicAuthenticationHandler(
         var password = credentials[1];
 
         var user = await context.Usuarios
-            .FirstOrDefaultAsync(target => username.Equals(target.Username) && password.Equals(target.Password));
+            .FirstOrDefaultAsync(target => username.Equals(target.Nombre) && password.Equals(target.Contrasena));
         if (user == null)
         {
             return AuthenticateResult.Fail("Unauthorized");
@@ -55,10 +55,10 @@ public class BasicAuthenticationHandler(
         var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, username) };
 
         var roles = await context.UsuariosRoles
-            .Where(rol => rol.UserId == user.Id)
-            .Include(rol => rol.Role)
+            .Where(rol => rol.UsuarioId == user.Id)
+            .Include(rol => rol.Rol)
             .ToListAsync();
-        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Role.Nombre!)));
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Rol.Nombre)));
 
         return AuthenticateResult.Success(new AuthenticationTicket(
             new ClaimsPrincipal(new ClaimsIdentity(claims, "Basic")),

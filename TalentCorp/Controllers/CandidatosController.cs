@@ -5,15 +5,15 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
-public class PuestosController(TalentCorpContext context) : Controller
+public class CandidatosController(TalentCorpContext context) : Controller
 {
-    // GET: Puestos
+    // GET: Candidatos
     public async Task<IActionResult> Index()
     {
-        return View(await context.Puestos.ToListAsync());
+        return View(await context.Candidatos.ToListAsync());
     }
 
-    // GET: Puestos/Details/5
+    // GET: Candidatos/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -21,39 +21,41 @@ public class PuestosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        var puesto = await context.Puestos
+        var candidato = await context.Candidatos
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (puesto == null)
+        if (candidato == null)
         {
             return NotFound();
         }
 
-        return View(puesto);
+        return View(candidato);
     }
 
-    // GET: Puestos/Create
+    // GET: Candidatos/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: Puestos/Create
+    // POST: Candidatos/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
+    public async Task<IActionResult> Create(
+        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")] Candidato candidato)
     {
         if (ModelState.IsValid)
         {
-            context.Add(puesto);
+            context.Add(candidato);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(puesto);
+
+        return View(candidato);
     }
 
-    // GET: Puestos/Edit/5
+    // GET: Candidatos/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -61,22 +63,24 @@ public class PuestosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        var puesto = await context.Puestos.FindAsync(id);
-        if (puesto == null)
+        var candidato = await context.Candidatos.FindAsync(id);
+        if (candidato == null)
         {
             return NotFound();
         }
-        return View(puesto);
+
+        return View(candidato);
     }
 
-    // POST: Puestos/Edit/5
+    // POST: Candidatos/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
+    public async Task<IActionResult> Edit(int id,
+        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")] Candidato candidato)
     {
-        if (id != puesto.Id)
+        if (id != candidato.Id)
         {
             return NotFound();
         }
@@ -85,12 +89,12 @@ public class PuestosController(TalentCorpContext context) : Controller
         {
             try
             {
-                context.Update(puesto);
+                context.Update(candidato);
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PuestoExists(puesto.Id))
+                if (!CandidatoExists(candidato.Id))
                 {
                     return NotFound();
                 }
@@ -99,12 +103,14 @@ public class PuestosController(TalentCorpContext context) : Controller
                     throw;
                 }
             }
+
             return RedirectToAction(nameof(Index));
         }
-        return View(puesto);
+
+        return View(candidato);
     }
 
-    // GET: Puestos/Delete/5
+    // GET: Candidatos/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -112,33 +118,33 @@ public class PuestosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        var puesto = await context.Puestos
+        var candidato = await context.Candidatos
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (puesto == null)
+        if (candidato == null)
         {
             return NotFound();
         }
 
-        return View(puesto);
+        return View(candidato);
     }
 
-    // POST: Puestos/Delete/5
+    // POST: Candidatos/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var puesto = await context.Puestos.FindAsync(id);
-        if (puesto != null)
+        var candidato = await context.Candidatos.FindAsync(id);
+        if (candidato != null)
         {
-            context.Puestos.Remove(puesto);
+            context.Candidatos.Remove(candidato);
         }
 
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool PuestoExists(int id)
+    private bool CandidatoExists(int id)
     {
-        return context.Puestos.Any(e => e.Id == id);
+        return context.Candidatos.Any(e => e.Id == id);
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace TalentCorp.Entities;
 
-namespace TalentCorp.Entities;
-
-public class Empleado
+public sealed class Empleado
 {
     public int Id { get; set; }
 
@@ -23,7 +20,7 @@ public class Empleado
 
     public int CandidatoId { get; set; }
 
-    public virtual Candidato Candidato { get; set; } = null!;
+    public Candidato Candidato { get; set; } = null!;
 
-    public virtual Puesto Puesto { get; set; } = null!;
+    public Puesto Puesto { get; set; } = null!;
 }

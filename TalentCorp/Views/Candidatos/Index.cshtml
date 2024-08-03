@@ -1,4 +1,4 @@
-@model IEnumerable<TalentCorp.Entities.Puesto>
+@model IEnumerable<TalentCorp.Entities.Candidato>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,22 +14,19 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Cédula)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
+                @Html.DisplayNameFor(model => model.Apellido)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NivelRiesgo)
+                @Html.DisplayNameFor(model => model.FechaIngreso)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SalarioMin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SalarioMax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
+                @Html.DisplayNameFor(model => model.Departamento)
             </th>
             <th></th>
         </tr>
@@ -38,22 +35,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Cédula)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
+                @Html.DisplayFor(modelItem => item.Apellido)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NivelRiesgo)
+                @Html.DisplayFor(modelItem => item.FechaIngreso)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SalarioMin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SalarioMax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+                @Html.DisplayFor(modelItem => item.Departamento)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

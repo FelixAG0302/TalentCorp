@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TalentCorp.Context;
 using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers.Authentication;
@@ -20,9 +21,9 @@ public class AuthenticationController(TalentCorpContext context) : Controller
     {
         var usuario = new Usuario
         {
-            Username = modelUsuario.Username,
-            Email = modelUsuario.Email,
-            Password = modelUsuario.Password
+            Nombre = modelUsuario.Nombre,
+            Contrasena = modelUsuario.Correo,
+            Correo = modelUsuario.Contrasena
         };
 
         var rol = await context.Roles
@@ -36,8 +37,8 @@ public class AuthenticationController(TalentCorpContext context) : Controller
         await context.UsuariosRoles.AddAsync(
             new UsuariosRole
             {
-                User = usuario,
-                Role = rol
+                Usuario = usuario,
+                Rol = rol
             }
         );
 
@@ -57,7 +58,7 @@ public class AuthenticationController(TalentCorpContext context) : Controller
     public async Task<IActionResult> Login(Usuario modelUsuario)
     {
         var usuario = await context.Usuarios
-            .Where(u => u.Username == modelUsuario.Username && u.Password == modelUsuario.Password)
+            .Where(u => u.Nombre == modelUsuario.Nombre && u.Contrasena == modelUsuario.Contrasena)
             .FirstOrDefaultAsync();
         if (usuario == null)
         {
@@ -67,7 +68,7 @@ public class AuthenticationController(TalentCorpContext context) : Controller
 
         Response.Cookies.Append(
             "Authorization",
-            "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(usuario.Username + ":" + usuario.Password)),
+            "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(usuario.Nombre + ":" + usuario.Contrasena)),
             new CookieOptions
             {
                 Expires = DateTimeOffset.Now.AddDays(1),

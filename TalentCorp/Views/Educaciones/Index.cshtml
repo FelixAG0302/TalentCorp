@@ -1,4 +1,4 @@
-@model IEnumerable<TalentCorp.Entities.Puesto>
+@model IEnumerable<TalentCorp.Entities.Educacion>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,22 +14,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Nivel)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
+                @Html.DisplayNameFor(model => model.Institucion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NivelRiesgo)
+                @Html.DisplayNameFor(model => model.Idiomas)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SalarioMin)
+                @Html.DisplayNameFor(model => model.FechaDesde)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SalarioMax)
+                @Html.DisplayNameFor(model => model.FechaHasta)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Estado)
+                @Html.DisplayNameFor(model => model.Candidato)
             </th>
             <th></th>
         </tr>
@@ -38,22 +38,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
+                @Html.DisplayFor(modelItem => item.Nivel)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
+                @Html.DisplayFor(modelItem => item.Institucion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NivelRiesgo)
+                @Html.DisplayFor(modelItem => item.Idiomas)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SalarioMin)
+                @Html.DisplayFor(modelItem => item.FechaDesde)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SalarioMax)
+                @Html.DisplayFor(modelItem => item.FechaHasta)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+                @Html.DisplayFor(modelItem => item.Candidato.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

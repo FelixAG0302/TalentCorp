@@ -1,19 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TalentCorp.Context;
 using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
-public class PuestosController(TalentCorpContext context) : Controller
+public class EducacionesController(TalentCorpContext context) : Controller
 {
-    // GET: Puestos
+    // GET: Educaciones
     public async Task<IActionResult> Index()
     {
-        return View(await context.Puestos.ToListAsync());
+        var talentCorpContext = context.Educacions.Include(e => e.Candidato);
+        return View(await talentCorpContext.ToListAsync());
     }
 
-    // GET: Puestos/Details/5
+    // GET: Educaciones/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -21,39 +23,42 @@ public class PuestosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        var puesto = await context.Puestos
+        var educacion = await context.Educacions
+            .Include(e => e.Candidato)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (puesto == null)
+        if (educacion == null)
         {
             return NotFound();
         }
 
-        return View(puesto);
+        return View(educacion);
     }
 
-    // GET: Puestos/Create
+    // GET: Educaciones/Create
     public IActionResult Create()
     {
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id");
         return View();
     }
 
-    // POST: Puestos/Create
+    // POST: Educaciones/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
+    public async Task<IActionResult> Create([Bind("Id,CandidatoId,Nivel,Institucion,Idiomas,FechaDesde,FechaHasta")] Educacion educacion)
     {
         if (ModelState.IsValid)
         {
-            context.Add(puesto);
+            context.Add(educacion);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(puesto);
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", educacion.CandidatoId);
+        return View(educacion);
     }
 
-    // GET: Puestos/Edit/5
+    // GET: Educaciones/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -61,22 +66,23 @@ public class PuestosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        var puesto = await context.Puestos.FindAsync(id);
-        if (puesto == null)
+        var educacion = await context.Educacions.FindAsync(id);
+        if (educacion == null)
         {
             return NotFound();
         }
-        return View(puesto);
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", educacion.CandidatoId);
+        return View(educacion);
     }
 
-    // POST: Puestos/Edit/5
+    // POST: Educaciones/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,CandidatoId,Nivel,Institucion,Idiomas,FechaDesde,FechaHasta")] Educacion educacion)
     {
-        if (id != puesto.Id)
+        if (id != educacion.Id)
         {
             return NotFound();
         }
@@ -85,12 +91,12 @@ public class PuestosController(TalentCorpContext context) : Controller
         {
             try
             {
-                context.Update(puesto);
+                context.Update(educacion);
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PuestoExists(puesto.Id))
+                if (!EducacionExists(educacion.Id))
                 {
                     return NotFound();
                 }
@@ -101,10 +107,11 @@ public class PuestosController(TalentCorpContext context) : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        return View(puesto);
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", educacion.CandidatoId);
+        return View(educacion);
     }
 
-    // GET: Puestos/Delete/5
+    // GET: Educaciones/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -112,33 +119,34 @@ public class PuestosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        var puesto = await context.Puestos
+        var educacion = await context.Educacions
+            .Include(e => e.Candidato)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (puesto == null)
+        if (educacion == null)
         {
             return NotFound();
         }
 
-        return View(puesto);
+        return View(educacion);
     }
 
-    // POST: Puestos/Delete/5
+    // POST: Educaciones/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var puesto = await context.Puestos.FindAsync(id);
-        if (puesto != null)
+        var educacion = await context.Educacions.FindAsync(id);
+        if (educacion != null)
         {
-            context.Puestos.Remove(puesto);
+            context.Educacions.Remove(educacion);
         }
 
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool PuestoExists(int id)
+    private bool EducacionExists(int id)
     {
-        return context.Puestos.Any(e => e.Id == id);
+        return context.Educacions.Any(e => e.Id == id);
     }
 }

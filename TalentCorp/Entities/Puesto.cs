@@ -1,14 +1,14 @@
 ﻿namespace TalentCorp.Entities;
 
-public class Puesto
+public sealed class Puesto
 {
     public int Id { get; set; }
 
     public string Nombre { get; set; } = null!;
 
-    public string Descripción { get; set; } = null!;
+    public string Descripcion { get; set; } = null!;
 
-    public string? NivelRiesgo { get; set; }
+    public string NivelRiesgo { get; set; } = null!;
 
     public decimal SalarioMin { get; set; }
 
@@ -16,7 +16,7 @@ public class Puesto
 
     public string Estado { get; set; } = null!;
 
-    public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
+    public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
 
-    public virtual ICollection<Entrevista> Entrevista { get; set; } = new List<Entrevista>();
+    public ICollection<Entrevista> Entrevista { get; set; } = new List<Entrevista>();
 }

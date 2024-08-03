@@ -1,6 +1,6 @@
 ﻿namespace TalentCorp.Entities;
 
-public class Educacion
+public sealed class Educacion
 {
     public int Id { get; set; }
 
@@ -10,11 +10,11 @@ public class Educacion
 
     public string Institucion { get; set; } = null!;
 
-    public string? Idiomas { get; set; }
+    public string Idiomas { get; set; } = null!;
 
     public DateTime FechaDesde { get; set; }
 
     public DateTime FechaHasta { get; set; }
 
-    public virtual Candidato Candidato { get; set; } = null!;
+    public Candidato Candidato { get; set; } = null!;
 }
