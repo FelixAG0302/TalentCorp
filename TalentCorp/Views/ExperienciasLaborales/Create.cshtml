@@ -14,7 +14,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CandidatoId" class="control-label"></label>
+                <label asp-for="CandidatoId" class="control-label">Candidato</label>
                 <select asp-for="CandidatoId" class ="form-control" asp-items="ViewBag.CandidatoId"></select>
             </div>
             <div class="form-group">
@@ -23,17 +23,17 @@
                 <span asp-validation-for="Empresa" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PuestoOcupado" class="control-label"></label>
+                <label asp-for="PuestoOcupado" class="control-label">Puesto</label>
                 <input asp-for="PuestoOcupado" class="form-control" />
                 <span asp-validation-for="PuestoOcupado" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FechaDesde" class="control-label"></label>
+                <label asp-for="FechaDesde" class="control-label">Desde</label>
                 <input asp-for="FechaDesde" class="form-control" />
                 <span asp-validation-for="FechaDesde" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FechaHasta" class="control-label"></label>
+                <label asp-for="FechaHasta" class="control-label">Hasta</label>
                 <input asp-for="FechaHasta" class="form-control" />
                 <span asp-validation-for="FechaHasta" class="text-danger"></span>
             </div>

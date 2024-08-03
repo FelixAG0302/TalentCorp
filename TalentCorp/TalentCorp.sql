@@ -83,7 +83,7 @@ create table Usuarios
 
 create table Roles
 (
-    id          int         not null primary key,
+    id          int         not null primary key identity,
     nombre      varchar(50) not null,
     descripcion text        not null
 )

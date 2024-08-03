@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
+[Authorize]
 public class EntrevistasController(TalentCorpContext context) : Controller
 {
     // GET: Entrevistas
@@ -36,33 +38,29 @@ public class EntrevistasController(TalentCorpContext context) : Controller
     }
 
     // GET: Entrevistas/Create
+    [Authorize(Roles = "ADMIN")]
     public IActionResult Create()
     {
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id");
-        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Id");
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre");
+        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Nombre");
         return View();
     }
 
     // POST: Entrevistas/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,CandidatoId,PuestoId,FechaEntrevista")] Entrevista entrevista)
     {
-        if (ModelState.IsValid)
-        {
-            context.Add(entrevista);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", entrevista.CandidatoId);
-        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Id", entrevista.PuestoId);
-        return View(entrevista);
+        context.Add(entrevista);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: Entrevistas/Edit/5
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -76,52 +74,48 @@ public class EntrevistasController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", entrevista.CandidatoId);
-        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Id", entrevista.PuestoId);
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre", entrevista.CandidatoId);
+        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Nombre", entrevista.PuestoId);
         return View(entrevista);
     }
 
     // POST: Entrevistas/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,CandidatoId,PuestoId,FechaEntrevista")] Entrevista entrevista)
+        [Bind("Id,CandidatoId,PuestoId,FechaEntrevista")]
+        Entrevista entrevista)
     {
         if (id != entrevista.Id)
         {
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        try
         {
-            try
+            context.Update(entrevista);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!EntrevistaExists(entrevista.Id))
             {
-                context.Update(entrevista);
-                await context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!EntrevistaExists(entrevista.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", entrevista.CandidatoId);
-        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Id", entrevista.PuestoId);
-        return View(entrevista);
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: Entrevistas/Delete/5
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -142,6 +136,7 @@ public class EntrevistasController(TalentCorpContext context) : Controller
     }
 
     // POST: Entrevistas/Delete/5
+    [Authorize(Roles = "ADMIN")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)

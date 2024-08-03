@@ -22,8 +22,8 @@ public class AuthenticationController(TalentCorpContext context) : Controller
         var usuario = new Usuario
         {
             Nombre = modelUsuario.Nombre,
-            Contrasena = modelUsuario.Correo,
-            Correo = modelUsuario.Contrasena
+            Correo = modelUsuario.Correo,
+            Contrasena = modelUsuario.Contrasena
         };
 
         var rol = await context.Roles

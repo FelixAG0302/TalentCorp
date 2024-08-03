@@ -69,7 +69,7 @@ public class BasicAuthenticationHandler(
     protected override Task HandleForbiddenAsync(AuthenticationProperties properties)
     {
         Response.StatusCode = StatusCodes.Status403Forbidden;
-        Response.Redirect($"Error/?statusCode={StatusCodes.Status403Forbidden}");
+        Response.Redirect($"../Home/Error/?statusCode={StatusCodes.Status403Forbidden}");
         return Task.CompletedTask;
     }
 

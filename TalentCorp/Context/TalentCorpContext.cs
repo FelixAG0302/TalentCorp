@@ -212,9 +212,7 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
         {
             entity.HasKey(e => e.Id).HasName("PK__Roles__3213E83F24C8511A");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripcion)
                 .HasColumnType("text")
                 .HasColumnName("descripcion");

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TalentCorp.Context;
@@ -5,6 +6,7 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
+[Authorize]
 public class CandidatosController(TalentCorpContext context) : Controller
 {
     // GET: Candidatos
@@ -43,16 +45,12 @@ public class CandidatosController(TalentCorpContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")] Candidato candidato)
+        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")]
+        Candidato candidato)
     {
-        if (ModelState.IsValid)
-        {
-            context.Add(candidato);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        return View(candidato);
+        context.Add(candidato);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: Candidatos/Edit/5
@@ -78,36 +76,32 @@ public class CandidatosController(TalentCorpContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")] Candidato candidato)
+        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")]
+        Candidato candidato)
     {
         if (id != candidato.Id)
         {
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        try
         {
-            try
+            context.Update(candidato);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!CandidatoExists(candidato.Id))
             {
-                context.Update(candidato);
-                await context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!CandidatoExists(candidato.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
-        return View(candidato);
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: Candidatos/Delete/5

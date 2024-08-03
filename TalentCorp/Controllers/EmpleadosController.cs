@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
+[Authorize(Roles = "ADMIN")]
 public class EmpleadosController(TalentCorpContext context) : Controller
 {
     // GET: Empleados
@@ -49,18 +51,12 @@ public class EmpleadosController(TalentCorpContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("Id,Cedula,Nombre,Apellido,FechaIngreso,Departamento,Estado,PuestoId,CandidatoId")] Empleado empleado)
+        [Bind("Id,Cedula,Nombre,Apellido,FechaIngreso,Departamento,Estado,PuestoId,CandidatoId")]
+        Empleado empleado)
     {
-        if (ModelState.IsValid)
-        {
-            context.Add(empleado);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", empleado.CandidatoId);
-        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Id", empleado.PuestoId);
-        return View(empleado);
+        context.Add(empleado);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: Empleados/Edit/5
@@ -88,38 +84,32 @@ public class EmpleadosController(TalentCorpContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,Cedula,Nombre,Apellido,FechaIngreso,Departamento,Estado,PuestoId,CandidatoId")] Empleado empleado)
+        [Bind("Id,Cedula,Nombre,Apellido,FechaIngreso,Departamento,Estado,PuestoId,CandidatoId")]
+        Empleado empleado)
     {
         if (id != empleado.Id)
         {
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        try
         {
-            try
+            context.Update(empleado);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!EmpleadoExists(empleado.Id))
             {
-                context.Update(empleado);
-                await context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!EmpleadoExists(empleado.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", empleado.CandidatoId);
-        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Id", empleado.PuestoId);
-        return View(empleado);
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: Empleados/Delete/5

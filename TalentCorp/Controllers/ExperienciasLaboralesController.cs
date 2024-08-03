@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
+[Authorize]
 public class ExperienciasLaboralesController(TalentCorpContext context) : Controller
 {
     // GET: ExperienciasLaborales
@@ -37,7 +39,7 @@ public class ExperienciasLaboralesController(TalentCorpContext context) : Contro
     // GET: ExperienciasLaborales/Create
     public IActionResult Create()
     {
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id");
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre");
         return View();
     }
 
@@ -46,16 +48,13 @@ public class ExperienciasLaboralesController(TalentCorpContext context) : Contro
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,CandidatoId,Empresa,PuestoOcupado,FechaDesde,FechaHasta,Salario")] ExperienciaLaboral experienciaLaboral)
+    public async Task<IActionResult> Create(
+        [Bind("Id,CandidatoId,Empresa,PuestoOcupado,FechaDesde,FechaHasta,Salario")]
+        ExperienciaLaboral experienciaLaboral)
     {
-        if (ModelState.IsValid)
-        {
-            context.Add(experienciaLaboral);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", experienciaLaboral.CandidatoId);
-        return View(experienciaLaboral);
+        context.Add(experienciaLaboral);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: ExperienciasLaborales/Edit/5
@@ -71,7 +70,8 @@ public class ExperienciasLaboralesController(TalentCorpContext context) : Contro
         {
             return NotFound();
         }
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", experienciaLaboral.CandidatoId);
+
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre", experienciaLaboral.CandidatoId);
         return View(experienciaLaboral);
     }
 
@@ -80,35 +80,33 @@ public class ExperienciasLaboralesController(TalentCorpContext context) : Contro
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,CandidatoId,Empresa,PuestoOcupado,FechaDesde,FechaHasta,Salario")] ExperienciaLaboral experienciaLaboral)
+    public async Task<IActionResult> Edit(int id,
+        [Bind("Id,CandidatoId,Empresa,PuestoOcupado,FechaDesde,FechaHasta,Salario")]
+        ExperienciaLaboral experienciaLaboral)
     {
         if (id != experienciaLaboral.Id)
         {
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        try
         {
-            try
-            {
-                context.Update(experienciaLaboral);
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ExperienciaLaboralExists(experienciaLaboral.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
+            context.Update(experienciaLaboral);
+            await context.SaveChangesAsync();
         }
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", experienciaLaboral.CandidatoId);
-        return View(experienciaLaboral);
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ExperienciaLaboralExists(experienciaLaboral.Id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: ExperienciasLaborales/Delete/5

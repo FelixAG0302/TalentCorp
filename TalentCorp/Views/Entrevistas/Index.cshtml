@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FechaEntrevista)
+                Fecha
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Candidato)
@@ -32,10 +32,10 @@
                 @Html.DisplayFor(modelItem => item.FechaEntrevista)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Candidato.Id)
+                @Html.DisplayFor(modelItem => item.Candidato.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Puesto.Id)
+                @Html.DisplayFor(modelItem => item.Puesto.Nombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
