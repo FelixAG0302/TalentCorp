@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,6 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
-[Authorize]
 public class EducacionesController(TalentCorpContext context) : Controller
 {
     // GET: Educaciones
@@ -39,7 +37,7 @@ public class EducacionesController(TalentCorpContext context) : Controller
     // GET: Educaciones/Create
     public IActionResult Create()
     {
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre");
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id");
         return View();
     }
 
@@ -48,13 +46,16 @@ public class EducacionesController(TalentCorpContext context) : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(
-        [Bind("Id,CandidatoId,Nivel,Institucion,Idiomas,FechaDesde,FechaHasta")]
-        Educacion educacion)
+    public async Task<IActionResult> Create([Bind("Id,CandidatoId,Nivel,Institucion,Idiomas,FechaDesde,FechaHasta")] Educacion educacion)
     {
-        context.Add(educacion);
-        await context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        if (ModelState.IsValid)
+        {
+            context.Add(educacion);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", educacion.CandidatoId);
+        return View(educacion);
     }
 
     // GET: Educaciones/Edit/5
@@ -70,8 +71,7 @@ public class EducacionesController(TalentCorpContext context) : Controller
         {
             return NotFound();
         }
-
-        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre", educacion.CandidatoId);
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", educacion.CandidatoId);
         return View(educacion);
     }
 
@@ -80,33 +80,35 @@ public class EducacionesController(TalentCorpContext context) : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id,
-        [Bind("Id,CandidatoId,Nivel,Institucion,Idiomas,FechaDesde,FechaHasta")]
-        Educacion educacion)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,CandidatoId,Nivel,Institucion,Idiomas,FechaDesde,FechaHasta")] Educacion educacion)
     {
         if (id != educacion.Id)
         {
             return NotFound();
         }
 
-        try
+        if (ModelState.IsValid)
         {
-            context.Update(educacion);
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!EducacionExists(educacion.Id))
+            try
             {
-                return NotFound();
+                context.Update(educacion);
+                await context.SaveChangesAsync();
             }
-            else
+            catch (DbUpdateConcurrencyException)
             {
-                throw;
+                if (!EducacionExists(educacion.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+            return RedirectToAction(nameof(Index));
         }
-
-        return RedirectToAction(nameof(Index));
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Id", educacion.CandidatoId);
+        return View(educacion);
     }
 
     // GET: Educaciones/Delete/5

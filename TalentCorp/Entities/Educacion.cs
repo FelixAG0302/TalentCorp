@@ -16,5 +16,5 @@ public sealed class Educacion
 
     public DateTime FechaHasta { get; set; }
 
-    public Candidato Candidato { get; set; } = null!;
+    public Candidato? Candidato { get; set; }
 }

@@ -15,8 +15,8 @@ public sealed class Puesto
     public decimal SalarioMax { get; set; }
 
     public string Estado { get; set; } = null!;
+    
+    public ICollection<Candidato> Candidatos { get; set; } = new List<Candidato>();
 
     public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
-
-    public ICollection<Entrevista> Entrevista { get; set; } = new List<Entrevista>();
 }

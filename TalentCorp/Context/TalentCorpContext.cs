@@ -27,7 +27,7 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
     {
         modelBuilder.Entity<Candidato>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Candidat__3213E83FFF56908D");
+            entity.HasKey(e => e.Id).HasName("PK__Candidat__3213E83FCAB39976");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellido)
@@ -38,10 +38,6 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
                 .HasMaxLength(11)
                 .IsUnicode(false)
                 .HasColumnName("cédula");
-            entity.Property(e => e.Departamento)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("departamento");
             entity.Property(e => e.FechaIngreso)
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_ingreso");
@@ -49,11 +45,17 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("nombre");
+            entity.Property(e => e.PuestoId).HasColumnName("puesto_id");
+
+            entity.HasOne(d => d.Puesto).WithMany(p => p.Candidatos)
+                .HasForeignKey(d => d.PuestoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Candidato__puest__145C0A3F");
         });
 
         modelBuilder.Entity<Educacion>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Educacio__3213E83FDAE5EEEC");
+            entity.HasKey(e => e.Id).HasName("PK__Educacio__3213E83FE23C6C7C");
 
             entity.ToTable("Educacion");
 
@@ -81,27 +83,22 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
             entity.HasOne(d => d.Candidato).WithMany(p => p.Educacions)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Educacion__candi__1920BF5C");
+                .HasConstraintName("FK__Educacion__candi__1A14E395");
         });
 
         modelBuilder.Entity<Empleado>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Empleado__3213E83F6021C439");
+            entity.HasKey(e => e.Id).HasName("PK__Empleado__3213E83F678E2BB2");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellido)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("apellido");
-            entity.Property(e => e.CandidatoId).HasColumnName("candidato_id");
             entity.Property(e => e.Cedula)
                 .HasMaxLength(11)
                 .IsUnicode(false)
                 .HasColumnName("cedula");
-            entity.Property(e => e.Departamento)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("departamento");
             entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
@@ -115,42 +112,31 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
                 .HasColumnName("nombre");
             entity.Property(e => e.PuestoId).HasColumnName("puesto_id");
 
-            entity.HasOne(d => d.Candidato).WithMany(p => p.Empleados)
-                .HasForeignKey(d => d.CandidatoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Empleados__candi__20C1E124");
-
             entity.HasOne(d => d.Puesto).WithMany(p => p.Empleados)
                 .HasForeignKey(d => d.PuestoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Empleados__puest__21B6055D");
+                .HasConstraintName("FK__Empleados__puest__20C1E124");
         });
 
         modelBuilder.Entity<Entrevista>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Entrevis__3213E83FEC6D5A89");
+            entity.HasKey(e => e.Id).HasName("PK__Entrevis__3213E83FF75406CE");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CandidatoId).HasColumnName("candidato_id");
             entity.Property(e => e.FechaEntrevista)
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_entrevista");
-            entity.Property(e => e.PuestoId).HasColumnName("puesto_id");
 
             entity.HasOne(d => d.Candidato).WithMany(p => p.Entrevista)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Entrevist__candi__1BFD2C07");
-
-            entity.HasOne(d => d.Puesto).WithMany(p => p.Entrevista)
-                .HasForeignKey(d => d.PuestoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Entrevist__puest__1CF15040");
+                .HasConstraintName("FK__Entrevist__candi__1CF15040");
         });
 
         modelBuilder.Entity<ExperienciaLaboral>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Experien__3213E83F236AA580");
+            entity.HasKey(e => e.Id).HasName("PK__Experien__3213E83FF8B39D50");
 
             entity.ToTable("ExperienciaLaboral");
 
@@ -177,12 +163,12 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
             entity.HasOne(d => d.Candidato).WithMany(p => p.ExperienciaLaborals)
                 .HasForeignKey(d => d.CandidatoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Experienc__candi__164452B1");
+                .HasConstraintName("FK__Experienc__candi__173876EA");
         });
 
         modelBuilder.Entity<Puesto>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Puestos__3213E83F7BC17294");
+            entity.HasKey(e => e.Id).HasName("PK__Puestos__3213E83F821AE48D");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripcion)
@@ -210,7 +196,7 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Roles__3213E83F24C8511A");
+            entity.HasKey(e => e.Id).HasName("PK__Roles__3213E83FFF376B86");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripcion)
@@ -224,7 +210,7 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83FC14CEF6A");
+            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83F08791760");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Contrasena)
@@ -243,7 +229,7 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
 
         modelBuilder.Entity<UsuariosRole>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83FA4B26FE6");
+            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83FD758D7DD");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.RolId).HasColumnName("rol_id");
@@ -252,12 +238,12 @@ public class TalentCorpContext(DbContextOptions<TalentCorpContext> options) : Db
             entity.HasOne(d => d.Rol).WithMany(p => p.UsuariosRoles)
                 .HasForeignKey(d => d.RolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UsuariosR__rol_i__29572725");
+                .HasConstraintName("FK__UsuariosR__rol_i__286302EC");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.UsuariosRoles)
                 .HasForeignKey(d => d.UsuarioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UsuariosR__usuar__286302EC");
+                .HasConstraintName("FK__UsuariosR__usuar__276EDEB3");
         });
     }
 }

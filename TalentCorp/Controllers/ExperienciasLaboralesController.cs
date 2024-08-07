@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,6 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
-[Authorize]
 public class ExperienciasLaboralesController(TalentCorpContext context) : Controller
 {
     // GET: ExperienciasLaborales
@@ -52,9 +50,15 @@ public class ExperienciasLaboralesController(TalentCorpContext context) : Contro
         [Bind("Id,CandidatoId,Empresa,PuestoOcupado,FechaDesde,FechaHasta,Salario")]
         ExperienciaLaboral experienciaLaboral)
     {
-        context.Add(experienciaLaboral);
-        await context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        if (ModelState.IsValid)
+        {
+            context.Add(experienciaLaboral);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre", experienciaLaboral.CandidatoId);
+        return View(experienciaLaboral);
     }
 
     // GET: ExperienciasLaborales/Edit/5
@@ -89,24 +93,30 @@ public class ExperienciasLaboralesController(TalentCorpContext context) : Contro
             return NotFound();
         }
 
-        try
+        if (ModelState.IsValid)
         {
-            context.Update(experienciaLaboral);
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!ExperienciaLaboralExists(experienciaLaboral.Id))
+            try
             {
-                return NotFound();
+                context.Update(experienciaLaboral);
+                await context.SaveChangesAsync();
             }
-            else
+            catch (DbUpdateConcurrencyException)
             {
-                throw;
+                if (!ExperienciaLaboralExists(experienciaLaboral.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
-        return RedirectToAction(nameof(Index));
+        ViewData["CandidatoId"] = new SelectList(context.Candidatos, "Id", "Nombre", experienciaLaboral.CandidatoId);
+        return View(experienciaLaboral);
     }
 
     // GET: ExperienciasLaborales/Delete/5

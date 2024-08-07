@@ -17,7 +17,8 @@ create table Candidatos
     nombre        varchar(50) not null,
     apellido      varchar(50) not null,
     fecha_ingreso datetime    not null,
-    departamento  varchar(50) not null
+    puesto_id     int         not null,
+    foreign key (puesto_id) references Puestos (id)
 );
 
 
@@ -51,10 +52,8 @@ create table Entrevistas
 (
     id               int      not null primary key identity,
     candidato_id     int      not null,
-    puesto_id        int      not null,
     fecha_entrevista datetime not null,
     foreign key (candidato_id) references Candidatos (id),
-    foreign key (puesto_id) references Puestos (id)
 );
 
 
@@ -65,11 +64,8 @@ create table Empleados
     nombre        varchar(50) not null,
     apellido      varchar(50) not null,
     fecha_ingreso datetime    not null,
-    departamento  varchar(50) not null,
     estado        varchar(20) not null check (estado in ('ACTIVO', 'INACTIVO')),
     puesto_id     int         not null,
-    candidato_id  int         not null,
-    foreign key (candidato_id) references Candidatos (id),
     foreign key (puesto_id) references Puestos (id)
 );
 

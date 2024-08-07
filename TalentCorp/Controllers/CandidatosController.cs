@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TalentCorp.Context;
 using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
-[Authorize]
 public class CandidatosController(TalentCorpContext context) : Controller
 {
     // GET: Candidatos
     public async Task<IActionResult> Index()
     {
-        return View(await context.Candidatos.ToListAsync());
+        var talentCorpContext = context.Candidatos.Include(c => c.Puesto);
+        return View(await talentCorpContext.ToListAsync());
     }
 
     // GET: Candidatos/Details/5
@@ -24,6 +24,7 @@ public class CandidatosController(TalentCorpContext context) : Controller
         }
 
         var candidato = await context.Candidatos
+            .Include(c => c.Puesto)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (candidato == null)
         {
@@ -33,9 +34,43 @@ public class CandidatosController(TalentCorpContext context) : Controller
         return View(candidato);
     }
 
+    public async Task<IActionResult> MakeEmployee(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var candidato = await context.Candidatos
+            .Include(m => m.Puesto)
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (candidato == null)
+        {
+            return NotFound();
+        }
+
+        var empleado = new Empleado(
+            candidato.Cédula,
+            candidato.Nombre,
+            candidato.Apellido,
+            candidato.FechaIngreso,
+            "ACTIVO",
+            candidato.PuestoId,
+            candidato.Puesto!
+        );
+
+        await context.Empleados.AddAsync(empleado);
+        context.Candidatos.Remove(candidato);
+
+        await context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Empleados");
+    }
+
     // GET: Candidatos/Create
     public IActionResult Create()
     {
+        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Nombre");
         return View();
     }
 
@@ -45,12 +80,18 @@ public class CandidatosController(TalentCorpContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")]
+        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,PuestoId,Departamento")]
         Candidato candidato)
     {
-        context.Add(candidato);
-        await context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        if (ModelState.IsValid)
+        {
+            context.Add(candidato);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Nombre", candidato.PuestoId);
+        return View(candidato);
     }
 
     // GET: Candidatos/Edit/5
@@ -67,6 +108,7 @@ public class CandidatosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
+        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Nombre", candidato.PuestoId);
         return View(candidato);
     }
 
@@ -76,7 +118,7 @@ public class CandidatosController(TalentCorpContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,Departamento")]
+        [Bind("Id,Cédula,Nombre,Apellido,FechaIngreso,PuestoId,Departamento")]
         Candidato candidato)
     {
         if (id != candidato.Id)
@@ -84,24 +126,28 @@ public class CandidatosController(TalentCorpContext context) : Controller
             return NotFound();
         }
 
-        try
+        if (ModelState.IsValid)
         {
-            context.Update(candidato);
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!CandidatoExists(candidato.Id))
+            try
             {
-                return NotFound();
+                context.Update(candidato);
+                await context.SaveChangesAsync();
             }
-            else
+            catch (DbUpdateConcurrencyException)
             {
+                if (!CandidatoExists(candidato.Id))
+                {
+                    return NotFound();
+                }
+
                 throw;
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
-        return RedirectToAction(nameof(Index));
+        ViewData["PuestoId"] = new SelectList(context.Puestos, "Id", "Nombre", candidato.PuestoId);
+        return View(candidato);
     }
 
     // GET: Candidatos/Delete/5
@@ -113,6 +159,7 @@ public class CandidatosController(TalentCorpContext context) : Controller
         }
 
         var candidato = await context.Candidatos
+            .Include(c => c.Puesto)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (candidato == null)
         {

@@ -16,5 +16,5 @@ public sealed class ExperienciaLaboral
 
     public decimal Salario { get; set; }
 
-    public Candidato Candidato { get; set; } = null!;
+    public Candidato? Candidato { get; set; }
 }

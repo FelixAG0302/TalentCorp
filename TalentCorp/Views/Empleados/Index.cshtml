@@ -48,8 +48,8 @@
 <h2 style="text-align:center; margin-top:2%; margin-bottom:2%;">Lista de empleados</h2>
 
 <div class="card">
-<table class="table">
-    <thead class="headRow">
+    <table class="table">
+        <thead class="headRow">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Cedula)
@@ -61,60 +61,51 @@
                 @Html.DisplayNameFor(model => model.Apellido)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FechaIngreso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Departamento)
+                Fecha de Ingreso
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Candidato)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Puesto)
             </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-                <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
             <tr class="rowOne">
-                    <td class="firstCell">
-                @Html.DisplayFor(modelItem => item.Cedula)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaIngreso)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Departamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Candidato.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Puesto.Id)
-            </td>
-                    <td class="lastCell">
-                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Ver detalles</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                <td class="firstCell">
+                    @Html.DisplayFor(modelItem => item.Cedula)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaIngreso)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Puesto!.Nombre)
+                </td>
+                <td class="lastCell">
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Ver detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
 <p>
     <a asp-action="Create">Agregar nuevo</a>

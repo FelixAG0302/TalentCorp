@@ -35,39 +35,38 @@
 </style>
 
 <h3 class="logo">Editar información del candidato</h3>
-<hr />
+<hr/>
 <div class="card">
     <div class="formu">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
             <div class="formuContent">
                 <label asp-for="Cédula" class="control-label"></label>
-                <input asp-for="Cédula" class="form-control" />
+                <input asp-for="Cédula" class="form-control"/>
                 <span asp-validation-for="Cédula" class="text-danger"></span>
             </div>
             <div class="formuContent">
                 <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
+                <input asp-for="Nombre" class="form-control"/>
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="formuContent">
                 <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
+                <input asp-for="Apellido" class="form-control"/>
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div class="formuContent">
                 <label asp-for="FechaIngreso" class="control-label">Fecha de Solicitud</label>
-                <input asp-for="FechaIngreso" class="form-control" />
+                <input asp-for="FechaIngreso" class="form-control"/>
                 <span asp-validation-for="FechaIngreso" class="text-danger"></span>
             </div>
-            <div class="formuContent">
-                <label asp-for="Departamento" class="control-label"></label>
-                <input asp-for="Departamento" class="form-control" />
-                <span asp-validation-for="Departamento" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="PuestoId" class="control-label">Puesto</label>
+                <select asp-for="PuestoId" class ="form-control" asp-items="ViewBag.PuestoId"></select>
             </div>
             <div style="text-align:right">
-                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                <input type="submit" value="Guardar cambios" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -76,4 +75,3 @@
 <div>
     <a asp-action="Index"><- Regresar</a>
 </div>
-

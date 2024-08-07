@@ -40,50 +40,50 @@
 <div>
 
     <h3 class="logo">Eliminar candidato</h3>
-    <hr />
+    <hr/>
     <div class="card">
-    <dl class="row">
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Cédula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cédula)
-        </dd>
-        <hr />
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-            <hr />
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
-            <hr />
-        <dt class = "col-sm-5">
-            Fecha de Solicitud
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaIngreso)
-        </dd>
-            <hr />
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Departamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Departamento)
-        </dd>
-    </dl>
+        <dl class="row">
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Cédula)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cédula)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Apellido)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Apellido)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                Fecha de Solicitud
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaIngreso)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Puesto)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Puesto.Nombre)
+            </dd>
+        </dl>
 
     </div >
-    <br />
+    <br/>
     <form asp-action="Delete" style="text-align:center">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <input type="hidden" asp-for="Id"/>
+        <input type="submit" value="Eliminar" class="btn btn-danger"/> |
         <a asp-action="Index"><- Regresar</a>
     </form>
 </div>

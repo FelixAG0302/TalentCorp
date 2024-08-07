@@ -59,16 +59,10 @@
             @Html.DisplayFor(model => model.Apellido)
         </dd>
         <dt class="col-sm-5">
-            @Html.DisplayNameFor(model => model.FechaIngreso)
+            Fecha de Ingreso
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FechaIngreso)
-        </dd>
-        <dt class="col-sm-5">
-            @Html.DisplayNameFor(model => model.Departamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Departamento)
         </dd>
         <dt class="col-sm-5">
             @Html.DisplayNameFor(model => model.Estado)
@@ -77,16 +71,10 @@
             @Html.DisplayFor(model => model.Estado)
         </dd>
         <dt class="col-sm-5">
-            @Html.DisplayNameFor(model => model.Candidato)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Candidato.Id)
-        </dd>
-        <dt class="col-sm-5">
             @Html.DisplayNameFor(model => model.Puesto)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Puesto.Id)
+            @Html.DisplayFor(model => model.Puesto!.Nombre)
         </dd>
     </dl>
     </div>

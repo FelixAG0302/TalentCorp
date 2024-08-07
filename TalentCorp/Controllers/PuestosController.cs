@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TalentCorp.Context;
@@ -6,7 +5,6 @@ using TalentCorp.Entities;
 
 namespace TalentCorp.Controllers;
 
-[Authorize]
 public class PuestosController(TalentCorpContext context) : Controller
 {
     // GET: Puestos
@@ -34,7 +32,6 @@ public class PuestosController(TalentCorpContext context) : Controller
     }
 
     // GET: Puestos/Create
-    [Authorize(Roles = "ADMIN")]
     public IActionResult Create()
     {
         return View();
@@ -43,19 +40,20 @@ public class PuestosController(TalentCorpContext context) : Controller
     // POST: Puestos/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(
-        [Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
+    public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
     {
-        context.Add(puesto);
-        await context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        if (ModelState.IsValid)
+        {
+            context.Add(puesto);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(puesto);
     }
 
     // GET: Puestos/Edit/5
-    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -68,46 +66,45 @@ public class PuestosController(TalentCorpContext context) : Controller
         {
             return NotFound();
         }
-
         return View(puesto);
     }
 
     // POST: Puestos/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id,
-        [Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,NivelRiesgo,SalarioMin,SalarioMax,Estado")] Puesto puesto)
     {
         if (id != puesto.Id)
         {
             return NotFound();
         }
 
-        try
+        if (ModelState.IsValid)
         {
-            context.Update(puesto);
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!PuestoExists(puesto.Id))
+            try
             {
-                return NotFound();
+                context.Update(puesto);
+                await context.SaveChangesAsync();
             }
-            else
+            catch (DbUpdateConcurrencyException)
             {
-                throw;
+                if (!PuestoExists(puesto.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+            return RedirectToAction(nameof(Index));
         }
-
-        return RedirectToAction(nameof(Index));
+        return View(puesto);
     }
 
     // GET: Puestos/Delete/5
-    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -126,7 +123,6 @@ public class PuestosController(TalentCorpContext context) : Controller
     }
 
     // POST: Puestos/Delete/5
-    [Authorize(Roles = "ADMIN")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)

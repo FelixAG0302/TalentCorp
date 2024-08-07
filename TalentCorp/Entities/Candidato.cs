@@ -12,11 +12,11 @@ public sealed class Candidato
 
     public DateTime FechaIngreso { get; set; }
 
-    public string Departamento { get; set; } = null!;
+    public int PuestoId { get; set; }
+    
+    public Puesto? Puesto { get; set; }
 
     public ICollection<Educacion> Educacions { get; set; } = new List<Educacion>();
-
-    public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
 
     public ICollection<Entrevista> Entrevista { get; set; } = new List<Entrevista>();
 

@@ -12,15 +12,25 @@ public sealed class Empleado
 
     public DateTime FechaIngreso { get; set; }
 
-    public string Departamento { get; set; } = null!;
-
     public string Estado { get; set; } = null!;
 
     public int PuestoId { get; set; }
 
-    public int CandidatoId { get; set; }
+    public Puesto? Puesto { get; set; }
 
-    public Candidato Candidato { get; set; } = null!;
+    public Empleado()
+    {
+    }
 
-    public Puesto Puesto { get; set; } = null!;
+    public Empleado(string cedula, string nombre, string apellido, DateTime fechaIngreso,
+        string estado, int puestoId, Puesto puesto)
+    {
+        Cedula = cedula;
+        Nombre = nombre;
+        Apellido = apellido;
+        FechaIngreso = fechaIngreso;
+        Estado = estado;
+        PuestoId = puestoId;
+        Puesto = puesto;
+    }
 }

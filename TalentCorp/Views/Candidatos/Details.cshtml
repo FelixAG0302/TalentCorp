@@ -37,52 +37,51 @@
 </style>
 
 
-
 <div>
     <h3 class="logo">Detalles del candidato</h3>
-    <hr />
+    <hr/>
     <div class="card">
-    <dl class="row">
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Cédula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cédula)
-        </dd>
-        <hr />
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-            <hr />
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
-            <hr />
-        <dt class = "col-sm-5">
+        <dl class="row">
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Cédula)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cédula)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Apellido)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Apellido)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
                 Fecha de Solicitud
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaIngreso)
-        </dd>
-            <hr />
-        <dt class = "col-sm-5">
-            @Html.DisplayNameFor(model => model.Departamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Departamento)
-        </dd>
-    </dl>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaIngreso)
+            </dd>
+            <hr/>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Puesto)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Puesto.Nombre)
+            </dd>
+        </dl>
     </div>
 </div>
-<br />
+<br/>
 <div style="text-align:center">
-    <a asp-action="Index">Convertir en Empleado</a> |
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
+    <a asp-action="MakeEmployee" asp-route-id="@Model.Id">Convertir en Empleado</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
     <a asp-action="Index"><- Regresar</a>
 </div>

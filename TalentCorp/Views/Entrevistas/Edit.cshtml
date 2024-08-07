@@ -36,30 +36,25 @@
 </style>
 
 <h3 class="logo">Editar información de la entrevista</h3>
-<hr />
+<hr/>
 
 <div class="card">
     <div class="formu">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
             <div class="formuContent">
                 <label asp-for="CandidatoId" class="control-label">Candidato</label>
                 <select asp-for="CandidatoId" class="form-control" asp-items="ViewBag.CandidatoId"></select>
                 <span asp-validation-for="CandidatoId" class="text-danger"></span>
             </div>
             <div class="formuContent">
-                <label asp-for="PuestoId" class="control-label">Puesto</label>
-                <select asp-for="PuestoId" class="form-control" asp-items="ViewBag.PuestoId"></select>
-                <span asp-validation-for="PuestoId" class="text-danger"></span>
-            </div>
-            <div class="formuContent">
                 <label asp-for="FechaEntrevista" class="control-label">Fecha</label>
-                <input asp-for="FechaEntrevista" class="form-control" />
+                <input asp-for="FechaEntrevista" class="form-control"/>
                 <span asp-validation-for="FechaEntrevista" class="text-danger"></span>
             </div>
             <div class="text-align:right">
-                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                <input type="submit" value="Guardar cambios" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -68,4 +63,3 @@
 <div>
     <a asp-action="Index"><- Regresar</a>
 </div>
-
