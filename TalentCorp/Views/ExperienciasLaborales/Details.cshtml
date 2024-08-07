@@ -5,43 +5,73 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+
+<style>
+
+    .card {
+        width: 40%;
+        border-radius: 8px;
+        margin-left: 30%;
+        margin-right: 30%;
+        box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 20%);
+        text-align: justify;
+        padding-top: 2%;
+        padding-right: 3%;
+        padding-bottom: 2%;
+        padding-left: 3%;
+    }
+
+    .formu {
+    }
+
+    .formuContent {
+        margin-bottom: 5%;
+    }
+
+    .logo {
+        padding-top: 1%;
+        position: relative;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
 
 <div>
-    <h4>ExperienciaLaboral</h4>
-    <hr/>
-    <dl class="row">
-        <dt class="col-sm-2">
+    <h3 class="logo">Detalles de experiencia laboral</h3>
+    <hr />
+    <dl class="card">
+        <dt class="col-sm-5">
             @Html.DisplayNameFor(model => model.Empresa)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Empresa)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-5">
             Puesto
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PuestoOcupado)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-5">
             Desde
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaDesde)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-5">
             Hasta
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaHasta)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-5">
             @Html.DisplayNameFor(model => model.Salario)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salario)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-5">
             @Html.DisplayNameFor(model => model.Candidato)
         </dt>
         <dd class="col-sm-10">
@@ -49,7 +79,7 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div style="text-align:center">
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
+    <a asp-action="Index"><- Regresar<</a>
 </div>
