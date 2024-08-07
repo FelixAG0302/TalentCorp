@@ -4,107 +4,133 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<meta charset="UTF-8">
 <style>
-
-     .card {
-   padding-left:2%;
+    .card {
+        padding-left: 2%;
         padding-right: 2%;
         padding-top: 2%;
         padding-bottom: 2%;
         border-radius: 8px;
-     
         box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 20%);
-     
     }
 
     .rowOne {
         border-radius: 8px;
         background-color: rgba(23, 141, 232, 0.3);
     }
-    .firstCell{
-        /* top-left | top-right | bottom-right | bottom-left */
+
+    .firstCell {
         border-radius: 8px 0 0 8px;
     }
 
     .lastCell {
-        /* top-left | top-right | bottom-right | bottom-left */
         border-radius: 0 8px 8px 0;
     }
 
-    .headRow{
+    .headRow {
         margin-bottom: 20%;
     }
-    td{
-    
-    padding-bottom: 5%;
 
+    td {
+        padding-bottom: 5%;
     }
 
     tr {
-       
         border-bottom: 0pt solid white;
     }
-
-
 </style>
 
 <h2 style="text-align:center; margin-top:2%; margin-bottom:2%;">Lista de Candidatos</h2>
 
+<form action="/Candidatos/Index" method="get" id="filterForm">
+    <div class="form-group">
+        <select name="selectedPuesto" class="form-control" onchange="submitForm()">
+       
+   
+        </select>
+    </div>
+</form>
+<br />
 <div class="card">
-<table class="table">
+    <table class="table">
         <thead class="headRow">
-        <tr >
-            <th>
-                @Html.DisplayNameFor(model => model.Cédula)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Apellido)
-            </th>
-            <th>
-                    Fecha de Solicitud
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Puesto)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cédula)
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Nombre</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["ApellidoSortParm"]">Apellido</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">Fecha de Solicitud</a>
+                </th>
+                <th>
+                   Puesto
+                </th>
+                <th></th>
+            </tr>
+        </thead>
 
-    <tbody>
-@foreach (var item in Model) {
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                 <tr class="rowOne">
                     <td class="firstCell">
-                @Html.DisplayFor(modelItem => item.Cédula)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaIngreso)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Puesto.Nombre)
-            </td>
+                        @Html.DisplayFor(modelItem => item.Cédula)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Apellido)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaIngreso)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Puesto.Nombre)
+                    </td>
                     <td class="lastCell">
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Ver detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
-            </td>
-        </tr>
-
-}
-    </tbody>
-</table>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Ver detalles</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <br />
 <p>
     <a asp-action="Create">Agregar nuevo</a>
 </p>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener la lista de puestos desde ViewData
+        var puestos = JSON.parse('@Html.Raw(ViewData["Puestos"])');
+        var selectElement = document.querySelector("select[name='selectedPuesto']");
+
+        // Añadir opciones al dropdown
+        puestos.forEach(function (puesto) {
+            var option = document.createElement("option");
+            option.value = puesto;
+            option.textContent = puesto; // Asegúrate de que el texto se maneje correctamente
+            selectElement.appendChild(option);
+        });
+
+        // Manejar la selección actual
+        var currentFilter = "@ViewData["CurrentFilter"]";
+        if (currentFilter) {
+            selectElement.value = currentFilter;
+        }
+    });
+
+    function submitForm() {
+        document.getElementById('filterForm').submit();
+    }
+</script>
