@@ -5,13 +5,54 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<style>
+
+    .card {
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        border-radius: 8px;
+        box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 20%);
+    }
+
+    .rowOne {
+        border-radius: 8px;
+        background-color: rgba(23, 141, 232, 0.3);
+    }
+
+    .firstCell {
+        /* top-left | top-right | bottom-right | bottom-left */
+        border-radius: 8px 0 0 8px;
+    }
+
+    .lastCell {
+        /* top-left | top-right | bottom-right | bottom-left */
+        border-radius: 0 8px 8px 0;
+    }
+
+    .headRow {
+        margin-bottom: 20%;
+    }
+
+    td {
+        padding-bottom: 5%;
+    }
+
+    tr {
+        border-bottom: 0pt solid white;
+    }
+
+</style>
+
+<h2 style="text-align:center; margin-top:2%; margin-bottom:2%;">Listado de entrevistas</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<div class="card">
 <table class="table">
-    <thead>
+        <thead class="headRow">
         <tr>
             <th>
                 Fecha
@@ -27,7 +68,8 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="firstCell">
             <td>
                 @Html.DisplayFor(modelItem => item.FechaEntrevista)
             </td>
@@ -37,12 +79,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Puesto.Nombre)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <td class="lastCell">
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Ver detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+<br/>
+    <p>
+        <a asp-action="Create">Agregar nuevo</a>
+    </p>
