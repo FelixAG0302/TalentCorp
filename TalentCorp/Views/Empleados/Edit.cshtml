@@ -5,63 +5,91 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<style>
 
-<h4>Empleado</h4>
+    .card {
+        width: 40%;
+        border-radius: 8px;
+        margin-left: 30%;
+        margin-right: 30%;
+        box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 20%);
+        text-align: justify;
+    }
+
+    .formu {
+        padding-top: 5%;
+        padding-right: 10%;
+        padding-bottom: 5%;
+        padding-left: 10%;
+    }
+
+    .formuContent {
+        margin-bottom: 5%;
+    }
+
+    .logo {
+        padding-top: 1%;
+        position: relative;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+<h3 class="logo">Editar información del empleado</h3>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
+<div class="card">
+    <div class="formu">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="Cedula" class="control-label"></label>
                 <input asp-for="Cedula" class="form-control" />
                 <span asp-validation-for="Cedula" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="Apellido" class="control-label"></label>
                 <input asp-for="Apellido" class="form-control" />
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="FechaIngreso" class="control-label"></label>
                 <input asp-for="FechaIngreso" class="form-control" />
                 <span asp-validation-for="FechaIngreso" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="Departamento" class="control-label"></label>
                 <input asp-for="Departamento" class="form-control" />
                 <span asp-validation-for="Departamento" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="Estado" class="control-label"></label>
                 <input asp-for="Estado" class="form-control" />
                 <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="PuestoId" class="control-label"></label>
                 <select asp-for="PuestoId" class="form-control" asp-items="ViewBag.PuestoId"></select>
                 <span asp-validation-for="PuestoId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="formuContent">
                 <label asp-for="CandidatoId" class="control-label"></label>
                 <select asp-for="CandidatoId" class="form-control" asp-items="ViewBag.CandidatoId"></select>
                 <span asp-validation-for="CandidatoId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="text-align:right">
+                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index"><- Regresar</a>
 </div>
 
